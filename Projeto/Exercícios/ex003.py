@@ -17,6 +17,6 @@ Se nada for digitado em nome ou idade:
 name = input("Digit your name: ").upper()
 age_str = input("Digit your age: ")
 if name != "" or age_str != "":
-    print(f"Your name is {name}. Your reverse name is: {name[::-1]}. Your name have spaces? {name.__contains__(" ")}. Your name have a len of {len(name)} characters. The first letter of your name is: {name[0]}. The last letter of your name is: {name[-1]}.")
+    print(f"Your name is {name}. Your reverse name is: {name[::-1]}.\nYour name have spaces? {name.__contains__(" ")}. Your name have a len of {len(name)} characters.\nThe first letter of your name is: {name[0]}. The last letter of your name is: {name[-1]}.")
 else:
-    print("Sorry, your don't answer the ask.")
+    print("Sorry, you don't answer the ask.")
