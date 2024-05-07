@@ -13,6 +13,12 @@ Métodos úteis:
     + - concatena listas
 Create Read Update   Delete
 Criar, ler, alterar, apagar = lista[i] (CRUD)
+
+Cuidados com dados mutáveis
+= - copiado o valor (imutáveis)
+= - aponta para o mesmo valor na memória (mutável)
+
+for in com listas
 """
 #        +01234
 #        -54321
@@ -29,6 +35,8 @@ lista[-3] = 'Maria'
 print(lista)
 print(lista[2], type(lista[2]))
 
+#############################################
+
 #        0   1   2   3      4       5
 lista = [10, 20, 30, 40, 'marcos', 4.3]
 lista[2] = 300
@@ -41,3 +49,48 @@ lista.append(60)
 lista.append(70)
 ultimo_valor = lista.pop(5)
 print(lista, 'Removido,', ultimo_valor)
+
+#############################################
+
+lista_a = [1, 2, 3]
+lista_b = [4, 5, 6]
+lista_c = lista_a + lista_b
+print(lista_c)
+# lista_d = lista_a.extend(lista_b)
+# print(lista_d) ----> None
+lista_a.extend(lista_b)
+print(lista_a) # -----> [1, 2, 3, 4, 5, 6]
+
+#############################################
+
+lista_a_ = ['Luiz', 'Maria', 1, True, 1.2]
+lista_b_ = lista_a_.copy() # ---> ['Luiz', 'Maria', 1, True, 1.2]
+lista_a_[0] = 'Qualquer coisa'
+# lista_b_ = lista_a_.copy() ----> ['Qualquer coisa', 'Maria', 1, True, 1.2]
+print(lista_a_) 
+print(lista_b_)
+
+#############################################
+
+lista_for = ['Maria', 'Helena', 'Luiz']
+
+for nome in lista_for:
+    print(nome, type(nome)) # --> Maria <class 'str'>
+                            # --> Helena <class 'str'>
+                            # --> Luiz <class 'str'>
+
+"""
+Exercício Solucionado
+Exiba os índices da lista
+0 Maria
+1 Helena
+2 Luiz
+"""
+lista = ["Maria", "Helena", "Jorge"]
+lista.append("Gilberto")
+print(lista)
+for nome in lista:
+    print(lista.index(nome), nome) # ---> 0 Maria
+                                   # ---> 1 Helena
+                                   # ---> 2 Jorge
+                                   # ---> 3 Gilberto
