@@ -1,4 +1,4 @@
-""" Criando arquivos com Python + Context Manager with """
+""" Criando arquivos com Python + with open (Context manager) e métodos úteis do TextIOWrapper """
 # Usamos a função open para abrir um arquivo em Python (ele pode ou não existir)
 # Modos:
 #       r (leitura), w (escrita), x (para criação)
