@@ -30,7 +30,8 @@ class Caneta:
 
 
 caneta = Caneta('Azul')
-caneta.cor = 'Rosa'
-caneta.cor_tampa = 'Azul'
-print(caneta.cor)
-print(caneta.cor_tampa)
+caneta.cor = 'Rosa'         # Setter
+caneta.cor_tampa = 'Azul'   # Setter
+print(caneta.cor, 
+      caneta.cor_tampa, 
+      sep='\n')
