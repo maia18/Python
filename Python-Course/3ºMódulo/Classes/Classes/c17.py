@@ -32,12 +32,13 @@ class Endereco:
 cliente1 = Cliente('Maria')
 cliente1.inserir_endereco('Av Brasil', 54)
 cliente1.inserir_endereco('Rua B', 6745)
+
 endereco_externo = Endereco('Av Saudade', 123213)
 cliente1.inserir_endereco_externo(endereco_externo)
+
 cliente1.listar_enderecos()
 
 del cliente1
-
 
 print(endereco_externo.rua, endereco_externo.numero)
 print('######################## AQUI TERMINA MEU CÓDIGO')
