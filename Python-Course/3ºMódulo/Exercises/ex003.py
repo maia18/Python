@@ -7,7 +7,7 @@ Conta (ABC)
     ContaCorrente
     ContaPoupanca
 
-Pessoa (ABC)
+Pessoa
     Cliente
         Clente -> Conta
 
@@ -34,146 +34,184 @@ Banco será responsável autenticar o cliente e as contas da seguinte maneira:
 Só será possível sacar se passar na autenticação do banco (descrita acima)
 Banco autentica por um método.
 """
-from abc import ABC, abstractmethod
+import abc
 
-class Conta(ABC):
-    def __init__(self, agência=None, num_conta=None, saldo=0):
-        self.agência = agência
-        self.num_conta = num_conta
+class Conta(abc.ABC):
+    def __init__(self, agencia: int, conta: int, saldo: float = 0) -> None:
+        self.agencia = agencia
+        self.conta = conta
         self.saldo = saldo
         
-    @property
-    def mudar_agência(self):
-        return self._agência
+    @abc.abstractmethod
+    def sacar(self, valor: float) -> float: ...
     
-    @mudar_agência.setter
-    def mudar_agência(self, novo_saldo):
-        self.saldo = novo_saldo
-        
-    @property
-    def mudar_num_conta(self):
-        return self._num_conta
-    
-    @mudar_num_conta.setter
-    def mudar_num_contao(self, novo_num_conta):
-        self.num_conta = novo_num_conta
-        
-    @property
-    def mudar_saldo(self):
-        return self._saldo
-    
-    @mudar_saldo.setter
-    def mudar_saldo(self, novo_saldo):
-        self.saldo = novo_saldo
-    
-    @abstractmethod
-    def sacar(self, valor):
-        self.saldo -= valor
-        return self.saldo
-    
-    def deposito(self, valor):
+    def depositar(self, valor: float):
         self.saldo += valor
+        self.detalhes(f"(DEPÓSITO {valor:.2f} R$)")
         return self.saldo
-    
-    
+        
+    def detalhes(self, msg: str = '') -> None:
+        print(f"O saldo é {self.saldo:.2f} R$\n{msg}\n---")
+        
+    def __repr__(self) -> str:
+        class_name = type(self).__name__
+        attrs = f'({self.agencia!r}, {self.conta!r}, {self.saldo!r})'
+        return f'{class_name}{attrs}'
+
+
 class ContaPoupanca(Conta):
-    def __init__(self, agência=None, num_conta=None, saldo=0):
-        super().__init__(agência, num_conta, saldo)
-    
-    def deposito(self, valor):
-        self.saldo += valor
-        return self.saldo 
-    
     def sacar(self, valor):
-        if 0 <= valor <= self.saldo:
-          self.saldo -= valor
-          return self.saldo
-        else:
-            print('Inválido') 
-
-
+        valor_pos_saque = self.saldo - valor
+        
+        if valor_pos_saque >= 0:
+            self.saldo -= valor
+            self.detalhes(f"(SAQUE {valor:.2f} R$)")
+            return self.saldo
+        
+        self.detalhes(
+            f"(SAQUE NEGADO {valor:.2f} R$)"
+        )
+        return self.saldo
+        
+        
 class ContaCorrente(Conta):
-    def __init__(self, limite_extra=1000, agência=None, num_conta=None, saldo=0):
-        super().__init__(agência, num_conta, saldo)
-        self.saldo = limite_extra + saldo
-
-    def deposito(self, valor):
-        self.saldo += valor
-        return self.saldo 
-    
+    def __init__(self, agencia: int, conta: int, saldo: float=0, limite: float=0):
+        super().__init__(agencia, conta, saldo)
+        self.limite = limite
+        
     def sacar(self, valor):
-        if 0 <= valor <= self.saldo:
-          self.saldo -= valor
-          return self.saldo
-        else:
-            print('Inválido') 
-
-
-class Pessoa: 
-    def __init__(self, nome, idade):
+        valor_pos_saque = self.saldo - valor
+        max_limite = -self.limite
+        
+        if valor_pos_saque >= max_limite:
+            self.saldo -= valor
+            self.detalhes(f"(SAQUE {valor:.2f} R$)")
+            return self.saldo
+        
+        self.detalhes(
+            f"(SAQUE NEGADO {valor:.2f} R$)\nLimite: {max_limite:.2f} R$"
+            )
+        return self.saldo
+    
+    def __repr__(self) -> str:
+        class_name = type(self).__name__
+        attrs = f'({self.agencia!r}, {self.conta!r}, {self.saldo!r}, {self.limite!r})'
+        return f'{class_name}{attrs}'
+      
+        
+class Pessoa:
+    def __init__(self, nome: str, idade: int) -> None:
         self.nome = nome
         self.idade = idade
     
     @property
-    def mudar_nome(self):
+    def nome(self):
         return self._nome
-    
-    @mudar_nome.setter
-    def mudar_nome(self, novo_nome):
-        self.nome = novo_nome
+    @nome.setter
+    def nome(self, nome:str):
+        self._nome = nome
         
     @property
-    def mudar_idade(self):
+    def idade(self):
         return self._idade
-    
-    @mudar_idade.setter
-    def mudar_idade(self, novo_idade):
-        self.idade = novo_idade
+    @idade.setter
+    def idade(self, idade:int):
+        self._idade = idade
+        
+    def __repr__(self) -> str:
+        class_name = type(self).__name__
+        attrs = f'({self.nome!r}, {self.idade!r})'
+        return f'{class_name}{attrs}'
 
 
 class Cliente(Pessoa):
-    def __init__(self, conta, nome, idade):
+    def __init__(self, nome: str, idade: int) -> None:
         super().__init__(nome, idade)
-        self.conta = conta
+        self.conta: Conta | None  = None
+
+
+class Banco:
+    def __init__(
+        self, 
+        agencias: list[int] | None = None, 
+        clientes: list[Pessoa] | None = None,
+        contas: list[Conta] | None = None
+        ):
+        self.agencias = agencias or []
+        self.clientes = clientes or []
+        self.contas = contas or []
+
+    def _checa_agencia(self, conta):
+        if conta.agencia in self.agencias:
+            print('_checa_agencia', True)
+            return True
+        print('_checa_agencia', False)
+        return False
+
+    def _checa_cliente(self, cliente):
+        if cliente in self.clientes:
+            print('_checa_cliente', True)
+            return True
+        print('_checa_cliente', False)
+        return False 
+
+    def _checa_conta(self, conta):
+        if conta in self.contas:
+            print('_checa_conta', True)
+            return True
         
-    @property
-    def mudar_conta(self):
-        return self._conta
+        print('_checa_conta', False)
+        return False 
     
-    @mudar_conta.setter
-    def mudar_conta(self, nova_conta):
-        self.conta = nova_conta
-
-
-class Banco(Cliente, Conta): ...
-
-
-
-if __name__ == "__main__":
-    ...
-    cc = ContaCorrente()
-    # cp = ContaPoupanca()
-    
-    p1 = Cliente(cc, 'kaue', 12)
-    print(p1.nome)
-    print(p1.idade)
-    print(p1.conta)
-    
-    print(p1.conta.agência)
-    print(p1.conta.num_conta)
-    print(p1.conta.saldo)
-    
-    p1.conta.deposito(200)
-    print(p1.conta.saldo)
+    def _checa_conta_cliente(self, cliente, conta):
+        if conta is cliente.conta:
+            print('_checa_conta_cliente', True)
+            return True
         
-    p1.conta.sacar(1300)
-    print(p1.conta.saldo)
+        print('_checa_conta_cliente', False)
+        return False 
     
+    def autenticar(
+        self, 
+        cliente: Pessoa, 
+        conta: Conta
+        ):
+        return self._checa_agencia(conta) and \
+            self._checa_cliente(cliente) and \
+                self._checa_conta(conta) and \
+                    self._checa_conta_cliente(cliente, conta)
     
-    # print(p1.idade)
-    # p1.idade = 30
-    # p1.nome = 'Cleiton'
-    # print(p1.nome)
-    # print(p1.idade)
+    def __repr__(self) -> str:
+        class_name = type(self).__name__
+        attrs = f'\
+            \nAGÊNCIAS: ({self.agencias!r},\
+            \nCLIENTES: {self.clientes!r},\
+            \nCONTAS:   {self.contas!r})'
+        return f'{class_name}{attrs}'
     
-    # p2 = Cliente(cp)
+
+if __name__ == '__main__':
+    cc1 = ContaCorrente(444, 555, 0, 100)
+    cp1 = ContaPoupanca(111, 222)
+
+    c1 = Cliente('Luiz', 30)
+    c2 = Cliente('Pedro', 50)
+    
+    c1.conta = cc1
+    c2.conta = cp1
+    
+    banco = Banco()
+    banco.agencias.extend([cc1.agencia, cp1.agencia])
+    banco.clientes.extend([c1, c2])
+    banco.contas.extend([cc1, cp1])
+    
+    print(f"{banco}\n")
+    
+    if banco.autenticar(c1, cc1):
+        print(c1.conta)
+        while True:
+            comando = input('[1] SAQUE | [2] DEPÓSITO \n')
+            if comando == '1':
+                cc1.sacar(float(input('Valor para saque -> ')))
+            elif comando == '2':        
+                cc1.depositar(float(input('Valor para depósito -> ')))
