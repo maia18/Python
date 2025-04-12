@@ -1,19 +1,21 @@
-import sys as s
+import sys
 
-from variables      import WINDOW_ICON_PATH
-from main_window    import MainWindow
 from buttons        import ButtonsGrid
-from style          import setupTheme
 from display        import Display
 from info           import Info
+from main_window    import MainWindow
+from style          import setupTheme
+from variables      import WINDOW_ICON_PATH
 
-from PySide6.QtGui      import QIcon
 from PySide6.QtWidgets  import QApplication
+from PySide6.QtGui      import QIcon
 
 if __name__ == '__main__':
+    
     # Cria a aplicação
-    app = QApplication(s.argv)
+    app = QApplication(sys.argv)
     setupTheme(app)
+    
     window = MainWindow()
 
     # Define o ícone
@@ -22,7 +24,7 @@ if __name__ == '__main__':
     app.setWindowIcon(icon)
 
     # Info
-    info = Info('2.0 ^ 10.0 = 1024')
+    info = Info('Sua conta')
     window.addWidgetToVLayout(info)
 
     # Display
@@ -30,7 +32,7 @@ if __name__ == '__main__':
     window.addWidgetToVLayout(display)
 
     # Grid
-    buttonsGrid = ButtonsGrid(display)
+    buttonsGrid = ButtonsGrid(display, info)
     window.vLayout.addLayout(buttonsGrid)
 
     # Executa tudo

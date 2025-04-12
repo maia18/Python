@@ -1,7 +1,7 @@
 # QSS - Estilos do QT for Python
 # https://doc.qt.io/qtforpython/tutorials/basictutorial/widgetstyling.html
 
-import qdarkstyle
+import qdarkstyle 
 from variables import (DARKER_PRIMARY_COLOR, DARKEST_PRIMARY_COLOR, PRIMARY_COLOR)
  
 qss = f"""
