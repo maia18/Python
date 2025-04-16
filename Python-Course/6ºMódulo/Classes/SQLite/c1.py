@@ -10,12 +10,6 @@ TABLE_NAME  = 'customers'
 connection  = sqlite3.connect(DB_FILE)
 cursor      = connection.cursor()
 
-# LOOK OUT: Deleting without where
-# cursor.execute(
-#     f'DELETE FROM {TABLE_NAME}'
-# )
-# connection.commit()
-
 # Create table
 cursor.execute(
     f'CREATE TABLE IF NOT EXISTS {TABLE_NAME}'

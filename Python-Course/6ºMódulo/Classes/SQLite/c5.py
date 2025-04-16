@@ -1,4 +1,4 @@
-""" SELECT no SQLite """
+""" UPDATE no SQLite """
 import sqlite3
 
 from c1 import DB_FILE, TABLE_NAME
@@ -6,11 +6,12 @@ from c1 import DB_FILE, TABLE_NAME
 connection  = sqlite3.connect(DB_FILE)
 cursor      = connection.cursor()
 
-cursor.execute(f'SELECT * FROM {TABLE_NAME}')
-
-for row in cursor.fetchall():
-    _id, name, weight = row
-    print(_id, name, weight)
+cursor.execute(
+    f'UPDATE {TABLE_NAME} '
+    'SET name="QUALQUER", weight=67.89 '
+    'WHERE id = 2'
+)
+connection.commit()
 
 cursor.close()
 connection.close()
