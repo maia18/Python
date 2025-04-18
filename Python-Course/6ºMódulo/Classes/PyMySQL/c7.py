@@ -20,5 +20,4 @@ with connection:
     with connection.cursor() as cursor:
         # SQL
         print(cursor)
-        
 '''
