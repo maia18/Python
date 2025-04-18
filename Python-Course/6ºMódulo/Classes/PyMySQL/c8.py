@@ -9,7 +9,9 @@ import pymysql
 import pymysql.cursors
 
 TABLE_NAME = 'customers'
-CURRENT_CURSOR = pymysql.cursors.SSDictCursor
+
+# CURRENT_CURSOR = pymysql.cursors.SSDictCursor
+CURRENT_CURSOR = pymysql.cursors.DictCursor
 
 dotenv.load_dotenv()
 
@@ -41,7 +43,7 @@ with connection:
 
 """ TRUNCATE e INSERT p/ limpar e criar valores na tabela com um ou mais cursores """
 
-        # CUIDADO: ISSO LIMPA A TABELA
+    # CUIDADO: ISSO LIMPA A TABELA
         cursor.execute(f'TRUNCATE TABLE {TABLE_NAME}')  # type: ignore
         
     connection.commit()
@@ -187,9 +189,31 @@ with connection:
             'WHERE id=%s'
         )
         cursor.execute(sql, ('Eleonor', 102, 4))
-        cursor.execute(f'SELECT * FROM {TABLE_NAME} ')
+        
+        cursor.execute(
+            f'SELECT id from {TABLE_NAME} ORDER BY id DESC LIMIT 1'
+        )
+        lastIdFromSelect = cursor.fetchone()
+        
+        resultFromSelect = cursor.execute(f'SELECT * FROM {TABLE_NAME} ')
 
+        data6 = cursor.fetchall()
+        
+        for row in data6:
+            print(row)
+
+        print('len(data6): '      ,   len(data6))
+        print('resultFromSelect: ',   resultFromSelect)
+        print('lastrowid na mão: ',   lastIdFromSelect)
+        print('rowcount: '        ,   cursor.rowcount)
+        print('lastrowid: '       ,   cursor.lastrowid)
+
+        cursor.scroll(0, 'absolute')
+        print('rownumber', cursor.rownumber)
+        
+        print()
         print('For 1: ')
+        
         for row in cursor.fetchall_unbuffered():
             print(row)
 
@@ -198,7 +222,11 @@ with connection:
 
         print()
         print('For 2: ')
-        # cursor.scroll(-1)
+        
+        # cursor.scroll(-2)   # Go back two lines
+        # cursor.scroll(1)    # Advance one line
+        # cursor.scroll(100)  # Index out of range
+        
         for row in cursor.fetchall_unbuffered():
             print(row)
             
