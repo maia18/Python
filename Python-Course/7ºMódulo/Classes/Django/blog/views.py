@@ -1,29 +1,31 @@
+
 from django.shortcuts import render
-# from django.http import HttpResponse
+
 
 def blog(request):
     print('blog')
-    # return HttpResponse('blog do app')
+
     context = {
-            'text': 'Olá blog'
+        'text': 'Olá blog'
     }
-    
+
     return render(
-        request, 
+        request,
         'blog/index.html',
-        context,
+        context
     )
-    
+
+
 def exemplo(request):
     print('exemplo')
-    # return HttpResponse('exemplo do app')
+
     context = {
-            'text': 'Olá exemplo',
-            'title': 'PÁGINA DE EXEMPLO - ',
+        'text': 'Olá exemplo',
+        'title': 'Essa é uma página de exemplo - ',
     }
-    
+
     return render(
-        request, 
+        request,
         'blog/exemplo.html',
-        context,
+        context
     )

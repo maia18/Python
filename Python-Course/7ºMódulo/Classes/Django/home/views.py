@@ -1,15 +1,15 @@
 from django.shortcuts import render
-# from django.http import HttpResponse
+
 
 def home(request):
     print('home')
-    # return HttpResponse('home do app')
+
     context = {
-            'text': 'Olá home'
+        'text': 'Olá home'
     }
-    
+
     return render(
-        request, 
+        request,
         'home/index.html',
-        context,    
+        context,
     )
