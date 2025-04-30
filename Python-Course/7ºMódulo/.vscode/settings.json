@@ -89,4 +89,5 @@
         "charset": "UTF-8"
     },
     "files.autoSave": "afterDelay",
+    "python.analysis.typeCheckingMode": "standard",
 }
