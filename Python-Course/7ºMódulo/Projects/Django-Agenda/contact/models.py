@@ -4,7 +4,7 @@ from django.utils import timezone
 # id (primary key - automático)
 # first_name (string), last_name (string), phone (string)
 # email (email), created_date (date), description (text)
-# category (foreign key), show (boolean), picture (image)
+# category (foreign key), show (boolean), picture (imagem)
 
 # Depois
 # owner (foreign key)
